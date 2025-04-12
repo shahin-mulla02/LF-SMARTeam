@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Contact Information</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        .contact-option {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 300px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            max-width: 90%;
+        }
+        .contact-option:hover {
+            transform: translateY(-5px);
+        }
+        .contact-option h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        #callButton {
+            position: relative;
+        }
+        #ringingAnimation {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background-image: url('ringing.gif');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 1000;
+        }
+        #backButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #424242;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        #backButton:hover {
+            background-color: #212121;
+        }
+    </style>
+</head>
+<body>
+    <button id="backButton" onclick="window.location.href='image_verification.html'">⬅ Back</button>
+
+    <h2 id="contactTitle">Contact Information</h2>
+
+    <div class="contact-option" onclick="openChat()">
+        <h3>💬 Chat with Finder</h3>
+    </div>
+
+    <div class="contact-option" id="callButton" onclick="callFinder()">
+        <h3>📞 Call Finder</h3>
+        <p id="finderPhone">Phone: Loading...</p>
+    </div>
+
+    <div class="contact-option" onclick="showAddress()">
+        <h3>📍 Address of Finder</h3>
+        <p id="finderAddress">Address: Loading...</p>
+    </div>
+
+    <div class="contact-option" onclick="showDescription()">
+        <h3>📝 Finder Description</h3>
+        <p id="finderDescription">Description: Loading...</p>
+    </div>
+
+    <div id="ringingAnimation"></div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const ownerName = urlParams.get('owner');
+        const itemId = urlParams.get('item');
+        document.getElementById("contactTitle").textContent = `Contact Information for ${ownerName}`;
+
+        const finderData = {
+            wallet: { phone: "123-456-7890", address: "123 Main St", description: "Friendly person who found your wallet." },
+            phone: { phone: "987-654-3210", address: "456 Oak Ave", description: "Found your phone near the mall entrance." },
+            purse: { phone: "555-123-4567", address: "789 Pine Ln", description: "Found the purse near the coffee shop." },
+            key: { phone: "111-222-3333", address: "101 Elm Rd", description: "found keys in the parking lot" },
+            laptop: { phone: "444-555-6666", address: "202 Maple Dr", description: "Found your laptop in the library." },
+            watch: { phone: "777-888-9999", address: "303 Cedar Ct", description: "Found your watch at the gym." },
+            glasses: { phone: "101-202-3030", address: "404 Birch St", description: "Found your glasses at a restaurant." },
+            backpack: { phone: "202-303-4040", address: "505 Willow Ave", description: "Found your backpack at the bus stop." },
+            umbrella: { phone: "303-404-5050", address: "606 Redwood Rd", description: "Found your umbrella at the metro station." },
+            headphones: { phone: "404-505-6060", address: "707 Cherry Ln", description: "Found your headphones at the train station." },
+            ring: { phone: "505-606-7070", address: "808 Oak Dr", description: "Found your ring at the shopping mall." },
+            necklace: { phone: "606-707-8080", address: "909 Pine Ct", description: "Found your necklace at the restaurant." },
+        };
+
+        const currentFinder = finderData[itemId];
+        if (currentFinder){
+            document.getElementById("finderPhone").textContent = `Phone: ${currentFinder.phone}`;
+            document.getElementById("finderAddress").textContent = `Address: ${currentFinder.address}`;
+            document.getElementById("finderDescription").textContent = `Description: ${currentFinder.description}`;
+        } else {
+            document.getElementById("finderPhone").textContent = `Phone: Information Not Available`;
+            document.getElementById("finderAddress").textContent = `Address: Information Not Available`;
+            document.getElementById("finderDescription").textContent = `Description: Information Not Available`;
+        }
+
+        function openChat() {
+            window.location.href = `chat.html?owner=${encodeURIComponent(ownerName)}&item=${encodeURIComponent(itemId)}`;
+        }
+
+        function callFinder() {
+            if (currentFinder){
+                document.getElementById('ringingAnimation').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('ringingAnimation').style.display = 'none';
+                    window.location.href = `tel:${currentFinder.phone}`;
+                }, 3000); // 3 seconds ringing animation
+            } else {
+                alert("Phone Number Not Available");
+            }
+        }
+
+        function showAddress() {
+            if (currentFinder){
+                alert(`Finder Address: ${currentFinder.address}`);
+            } else {
+                alert("Address Not Available");
+            }
+        }
+
+        function showDescription() {
+            if (currentFinder){
+                alert(`Finder Description: ${currentFinder.description}`);
+            } else {
+                alert("Description Not Available");
+            }
+        }
+    </script>
+</body>
+</html>
