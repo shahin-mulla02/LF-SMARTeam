@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard - Lost & Found</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background: url('images/image2.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 450px;
+            max-width: 90%;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #4a148c;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .dashboard-btn {
+            width: 95%;
+            padding: 18px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .lost-btn { background: #e57373; color: #fff; }
+        .found-btn { background: #81c784; color: #fff; }
+        .view-btn { background: #64b5f6; color: #fff; }
+
+        .dashboard-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .dashboard-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 105%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .dashboard-btn:hover::after {
+            opacity: 1;
+        }
+        
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            background: #424242;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s ease-in-out, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            background: #212121;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="back-button" onclick="window.location.href='login.html'">⬅ Back</button>
+
+    <div class="main-content">
+        <div class="dashboard-container">
+            <h2>Welcome to Lost & Found</h2>
+            <div class="buttons">
+                <button class="dashboard-btn lost-btn" data-tooltip="Don't lose hope. Report your item here. Someone may have found it and is looking for you." onclick="location.href='report-lost.html'">Report Lost Item</button>
+                <button class="dashboard-btn found-btn" data-tooltip="Your kindness can reunite someone with their belongings. Report what you found and help make a difference." onclick="location.href='report-found.html'">Report Found Item</button>
+                <button class="dashboard-btn view-btn" data-tooltip="See all items currently listed" onclick="location.href='view-items.html'">View Items List</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
