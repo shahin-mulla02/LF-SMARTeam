@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chat</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #chat-header {
+            background-color: #075E54;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #ECE5DD;
+        }
+        .message {
+            background-color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            align-self: flex-start;
+        }
+        .message.sent {
+            background-color: #DCF8C6;
+            align-self: flex-end;
+        }
+        #chat-input {
+            display: flex;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        #messageInput {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin-right: 5px;
+        }
+        #sendButton {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-header">
+        <h2 id="chatTitle">Chat with ...</h2>
+    </div>
+    <div id="chat-messages"></div>
+    <div id="chat-input">
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button id="sendButton" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const ownerName = urlParams.get('owner');
+        const itemId = urlParams.get('item');
+        document.getElementById("chatTitle").textContent = `Chat with ${ownerName}`;
+        let chatMessages = [];
+
+        function sendMessage() {
+            let message = document.getElementById("messageInput").value;
+            if (message) {
+                chatMessages.push({ text: message, sent: true });
+                displayChat();
+                document.getElementById("messageInput").value = "";
+            }
+        }
+
+        function displayChat() {
+            let chatDisplay = document.getElementById("chat-messages");
+            chatDisplay.innerHTML = chatMessages.map(msg => `<div class="message ${msg.sent ? 'sent' : ''}">${msg.text}</div>`).join("");
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+    </script>
+</body>
+</html>
