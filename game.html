@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lost & Found Game</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #f0f8ff, #d6eaf8, #f0f8ff);
+      background-size: 400% 400%;
+      animation: gradientMove 10s ease infinite;
+      text-align: center;
+      padding: 30px;
+    }
+
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+    }
+
+    #introText {
+      font-size: 1.2rem;
+      color: #555;
+      margin-top: 10px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    #startBtn {
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+
+    #startBtn:hover {
+      background-color: #2980b9;
+    }
+
+    #gameContainer {
+      display: none;
+      margin-top: 30px;
+    }
+
+    #clue {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .item-box {
+      display: inline-block;
+      margin: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s, background-color 0.3s;
+      cursor: pointer;
+    }
+
+    .item-box:hover {
+      transform: scale(1.1);
+      background-color: #e8f4fc;
+    }
+
+    .item-box i {
+      font-size: 3rem;
+      color: #2c3e50;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔍 Lost & Found Game</h1>
+  <p id="introText">Test your Lost & Found skills with a fun challenge! 🔎</p>
+
+  <button id="startBtn">Play Game</button>
+
+  <div id="gameContainer">
+    <div id="clue"></div>
+    <div id="itemsContainer"></div>
+    <div id="message"></div>
+  </div>
+
+  <!-- Sound effects -->
+  <audio id="correctSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_e05c070faa.mp3"></audio>
+  <audio id="wrongSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_aed1b1e1cd.mp3"></audio>
+
+  <footer>
+    🚀 Powered by Lost & Found | Helping you recover what matters.
+  </footer>
+
+  <script>
+    const levels = [
+      {
+        clue: "You carry it to class.",
+        items: [
+          { icon: "fa-solid fa-book", correct: true },
+          { icon: "fa-solid fa-wallet", correct: false },
+          { icon: "fa-solid fa-mobile-screen", correct: false }
+        ]
+      },
+      {
+        clue: "It unlocks doors.",
+        items: [
+          { icon: "fa-solid fa-key", correct: true },
+          { icon: "fa-solid fa-bottle-water", correct: false },
+          { icon: "fa-solid fa-pen", correct: false }
+        ]
+      },
+      {
+        clue: "Used to make calls.",
+        items: [
+          { icon: "fa-solid fa-mobile", correct: true },
+          { icon: "fa-solid fa-laptop", correct: false },
+          { icon: "fa-solid fa-clock", correct: false }
+        ]
+      }
+    ];
+
+    let currentLevel = 0;
+
+    const clueElement = document.getElementById("clue");
+    const itemsContainer = document.getElementById("itemsContainer");
+    const messageElement = document.getElementById("message");
+    const gameContainer = document.getElementById("gameContainer");
+    const startBtn = document.getElementById("startBtn");
+
+    const correctSound = document.getElementById("correctSound");
+    const wrongSound = document.getElementById("wrongSound");
+
+    startBtn.addEventListener("click", () => {
+      startBtn.style.display = "none";
+      gameContainer.style.display = "block";
+      loadLevel(currentLevel);
+    });
+
+    function loadLevel(levelIndex) {
+      const level = levels[levelIndex];
+      clueElement.textContent = level.clue;
+      messageElement.textContent = "";
+      itemsContainer.innerHTML = "";
+
+      level.items.forEach((item) => {
+        const itemBox = document.createElement("div");
+        itemBox.classList.add("item-box");
+
+        const icon = document.createElement("i");
+        icon.className = item.icon;
+        itemBox.appendChild(icon);
+
+        itemBox.addEventListener("click", () => {
+          if (item.correct) {
+            correctSound.play();
+            messageElement.style.color = "green";
+            messageElement.textContent = "✅ Correct!";
+            setTimeout(() => {
+              currentLevel++;
+              if (currentLevel < levels.length) {
+                loadLevel(currentLevel);
+              } else {
+                clueElement.textContent = "🎉 Well done!";
+                itemsContainer.innerHTML = "";
+                messageElement.textContent =
+                  "You’ve completed the game and learned how Lost & Found helps more than waiting!";
+              }
+            }, 1000);
+          } else {
+            wrongSound.play();
+            messageElement.style.color = "red";
+            messageElement.textContent = "❌ Try Again!";
+          }
+        });
+
+        itemsContainer.appendChild(itemBox);
+      });
+    }
+  </script>
+</body>
+</html>
